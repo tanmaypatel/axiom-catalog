@@ -18,7 +18,7 @@ class App extends Component<any> {
                 <Menu inverted={true} fixed='top'>
                     <Menu.Item header>Axiom Telecom</Menu.Item>
                 </Menu>
-                <div className='container'>
+                <div className='container-fluid app-container'>
                     <h1>Hello, World!</h1>
                     <pre>Version: {this.props.version}</pre>
                 </div>

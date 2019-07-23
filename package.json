@@ -20,7 +20,10 @@
     "react-redux": "^7.1.0",
     "react-router-dom": "^5.0.1",
     "redux": "^4.0.4",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-saga": "^1.0.5",
+    "semantic-ui-css": "^2.4.1",
+    "semantic-ui-react": "^0.87.3"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.136",
@@ -29,6 +32,7 @@
     "@types/react-dom": "^16.8.5",
     "@types/react-redux": "^7.1.1",
     "@types/redux-logger": "^3.0.7",
+    "@types/redux-saga": "^0.10.5",
     "autoprefixer": "^9.6.1",
     "bootstrap": "^4.3.1",
     "clean-webpack-plugin": "^3.0.0",

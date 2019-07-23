@@ -7,6 +7,7 @@ import store from './store';
 
 import App from './app/app';
 
+import '../node_modules/semantic-ui-css/semantic.min.css';
 import './index.scss';
 
 ReactDOM.render(

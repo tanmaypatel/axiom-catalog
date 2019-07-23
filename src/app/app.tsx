@@ -6,10 +6,23 @@ import { Menu } from 'semantic-ui-react';
 import { IAppState } from '../store';
 
 import './app.scss';
+import { Phone } from '../catalog/models/phone';
+import { loadCatalog } from '../catalog/actions';
 
-class App extends Component<any> {
-    constructor(props: any) {
+interface IProps {
+    phones: Phone[];
+    isCatalogLoading: boolean;
+    catalogLoadingError: null | Error;
+    dispatchLoadCatalog: (offset: number, limit: number) => void;
+}
+
+class App extends Component<IProps> {
+    constructor(props: IProps) {
         super(props);
+    }
+
+    componentDidMount() {
+        this.props.dispatchLoadCatalog(0, 0);
     }
 
     render() {
@@ -20,18 +33,25 @@ class App extends Component<any> {
                 </Menu>
                 <div className='container-fluid app-container'>
                     <h1>Hello, World!</h1>
-                    <pre>Version: {this.props.version}</pre>
                 </div>
             </Fragment>
         );
     }
 }
 
-const mapStateToProps = (state: IAppState, props: any) => ({
-    version: state.version
-});
+const mapStateToProps = (state: IAppState, props: any): Partial<IProps> => {
+    return {
+        phones: state.catalog.entities.phones,
+        isCatalogLoading: state.catalog.ui.isCatalogLoading,
+        catalogLoadingError: state.catalog.ui.catalogLoadingError
+    };
+};
 
-const mapDispatchToProps = (dispatch: any, props: any) => ({});
+const mapDispatchToProps = (dispatch: any, props: any): Partial<IProps> => {
+    return {
+        dispatchLoadCatalog: (offset: number, limit: number) => dispatch(loadCatalog(offset, limit))
+    };
+};
 
 export default connect(
     mapStateToProps,

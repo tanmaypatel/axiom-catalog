@@ -1,18 +1,15 @@
-import { applyMiddleware, createStore, Middleware } from 'redux';
+import { applyMiddleware, createStore, Middleware, combineReducers } from 'redux';
 import logger from 'redux-logger';
 import createSagaMiddleware from 'redux-saga';
-import { FSA } from 'flux-standard-action';
 import { composeWithDevTools } from 'redux-devtools-extension';
 
+import catalogReducer, { ICatalogState } from './catalog/reducers';
 import rootSaga from './sagas';
+import catalogSaga from './catalog/sagas';
 
 export interface IAppState {
-    version: string;
+    catalog: ICatalogState;
 }
-
-const defaultState: IAppState = {
-    version: '0.1.0'
-};
 
 function configureStore() {
     const sagaMiddleware = createSagaMiddleware();
@@ -22,24 +19,17 @@ function configureStore() {
     const enhancers = [middlewareEnhancer];
     const composedEnhancers = composeWithDevTools(...enhancers);
 
-    const store = createStore(rootReducer, composedEnhancers);
+    const store = createStore(
+        combineReducers({
+            catalog: catalogReducer
+        }),
+        composedEnhancers
+    );
 
     sagaMiddleware.run(rootSaga);
-
-    if (process.env.NODE_ENV !== 'production' && (module as any).hot) {
-        (module as any).hot.accept('./reducers', () =>
-            store.replaceReducer(rootReducer)
-        );
-    }
+    sagaMiddleware.run(catalogSaga);
 
     return store;
-}
-
-function rootReducer(state: IAppState = defaultState, action: FSA): IAppState {
-    switch (action.type) {
-        default:
-            return state;
-    }
 }
 
 const store = configureStore();

@@ -1,22 +1,18 @@
-import * as React from 'react'
-import * as ReactDOM from 'react-dom'
-import 'babel-polyfill'
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import 'babel-polyfill';
 
-import { App } from './app/app'
+import store from './store';
 
-import './index.scss'
+import App from './app/app';
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker
-            .register('/service-worker.js')
-            .then((registration) => {
-                console.log('SW registered: ', registration)
-            })
-            .catch((registrationError) => {
-                console.log('SW registration failed: ', registrationError)
-            })
-    })
-}
+import '../node_modules/semantic-ui-css/semantic.min.css';
+import './index.scss';
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(
+    <Provider store={store}>
+        <App />
+    </Provider>,
+    document.getElementById('root')
+);

@@ -1,7 +1,6 @@
 import { FSA } from 'flux-standard-action';
 
 import { actions } from '../../actions';
-import { IPhone, Phone } from '../../models/phone';
 
 export interface ICatalogUIState {
     filteredIds: number[];
@@ -15,7 +14,7 @@ const defaultState: ICatalogUIState = {
     catalogLoadingError: null
 };
 
-export default (state: ICatalogUIState = defaultState, action: FSA) => {
+export default (state: ICatalogUIState = defaultState, action: FSA<string, any>): ICatalogUIState => {
     switch (action.type) {
         case actions.LOAD_CATALOG__START:
             return {

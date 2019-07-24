@@ -13,7 +13,10 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.1.4",
+    "es6-promise": "^4.2.8",
+    "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
+    "numeral": "^2.0.6",
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -27,7 +30,9 @@
     "semantic-ui-react": "^0.87.3"
   },
   "devDependencies": {
+    "@types/isomorphic-fetch": "^0.0.35",
     "@types/lodash": "^4.14.136",
+    "@types/numeral": "^0.0.25",
     "@types/prop-types": "^15.7.1",
     "@types/react": "^16.8.23",
     "@types/react-dom": "^16.8.5",

@@ -30,5 +30,14 @@ export class Phone implements IPhone {
     readonly resolution: string;
     readonly hardware: IHardwareDetails;
 
-    constructor(data: IPhone) {}
+    constructor(data: IPhone) {
+        this.id = data.id;
+        this.brand = data.brand;
+        this.phone = data.phone;
+        this.picture = data.picture;
+        this.release = data.release;
+        this.sim = data.sim;
+        this.resolution = data.resolution;
+        this.hardware = data.hardware;
+    }
 }

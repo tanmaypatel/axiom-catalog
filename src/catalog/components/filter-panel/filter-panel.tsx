@@ -177,16 +177,12 @@ export class FilterPanel extends Component<IProps> {
     }
 
     private _updateStateWithProps(props: IProps): Partial<IState> {
-        console.log('props.selectedFilters', props.selectedFilters);
-
         const updatedState: Partial<IState> = {
             brands: zipObject(props.selectedFilters.brands, times(props.selectedFilters.brands.length, constant(true))),
             sim: zipObject(props.selectedFilters.sim, times(props.selectedFilters.sim.length, constant(true))),
             gps: zipObject(props.selectedFilters.gps, times(props.selectedFilters.gps.length, constant(true))),
             audioJack: zipObject(props.selectedFilters.audioJack, times(props.selectedFilters.audioJack.length, constant(true)))
         };
-
-        console.log('updatedState', updatedState);
 
         return updatedState;
     }

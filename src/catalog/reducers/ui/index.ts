@@ -6,14 +6,12 @@ import { ISelectedFilters, IFilterOptions } from '../../models/filters';
 import { Phone } from '../../models/phone';
 
 export interface ICatalogUIState {
-    filteredIds: number[];
     selectedFilters: ISelectedFilters;
     isCatalogLoading: boolean;
     catalogLoadingError: null | Error;
 }
 
 const defaultState: ICatalogUIState = {
-    filteredIds: [],
     selectedFilters: {
         searchTerm: '',
         brands: [],
@@ -32,14 +30,6 @@ export default (state: ICatalogUIState = defaultState, action: FSA<string, any>)
                 ...state,
                 isCatalogLoading: true,
                 catalogLoadingError: null
-            };
-        case actions.LOAD_CATALOG__SUCCESS:
-            return {
-                ...state,
-                isCatalogLoading: false,
-                filteredIds: map(action.payload as Phone[], (datum) => {
-                    return datum.id;
-                })
             };
         case actions.LOAD_CATALOG__ERROR:
             return {
@@ -63,8 +53,7 @@ export default (state: ICatalogUIState = defaultState, action: FSA<string, any>)
         case actions.FILTER_CATALOG:
             return {
                 ...state,
-                selectedFilters: action.payload,
-                filteredIds: [...state.filteredIds]
+                selectedFilters: action.payload
             };
         default:
             return state;

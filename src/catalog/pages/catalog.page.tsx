@@ -9,6 +9,7 @@ import { loadCatalog, filterCatalog } from '../../catalog/actions';
 import { PhoneList } from '../components/phone-list/phone-list';
 import { FilterPanel } from '../components/filter-panel/filter-panel';
 import { IFilterOptions, ISelectedFilters } from '../models/filters';
+import { applyFilters } from '../selectors/filters.selector';
 
 interface IProps {
     phones: Phone[];
@@ -58,9 +59,7 @@ class CatalogPage extends Component<IProps> {
 
 const mapStateToProps = (state: IAppState, props: any): Partial<IProps> => {
     return {
-        phones: map(state.catalog.ui.filteredIds, (datum: number) => {
-            return state.catalog.entities.phones[datum];
-        }),
+        phones: applyFilters(state.catalog.entities.phones, state.catalog.ui.selectedFilters),
         filterOptions: state.catalog.entities.filterOptions,
         seletedFilters: state.catalog.ui.selectedFilters,
         isCatalogLoading: state.catalog.ui.isCatalogLoading,

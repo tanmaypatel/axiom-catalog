@@ -7,13 +7,11 @@ import { actions } from '../../actions';
 
 export interface ICatalogEntitiesState {
     phones: { [key: number]: Phone };
-    allIds: number[];
     filterOptions: IFilterOptions;
 }
 
 const defaultState: ICatalogEntitiesState = {
     phones: [],
-    allIds: [],
     filterOptions: {
         brands: [],
         sim: [],

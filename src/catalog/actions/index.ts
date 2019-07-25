@@ -1,13 +1,14 @@
 import { createAction } from 'redux-actions';
 
 import { Phone } from '../models/phone';
-import { ISelectedFilters } from '../models/filters';
+import { ISelectedFilters, IFilterOptions } from '../models/filters';
 
 export const actions = {
     LOAD_CATALOG: 'LOAD_CATALOG',
     LOAD_CATALOG__START: 'LOAD_CATALOG__START',
     LOAD_CATALOG__SUCCESS: 'LOAD_CATALOG__SUCCESS',
     LOAD_CATALOG__ERROR: 'LOAD_CATALOG__ERROR',
+    FILTER_OPTIONS_UPDATE: 'FILTER_OPTIONS_UPDATE',
     FILTER_CATALOG: 'FILTER_CATALOG'
 };
 
@@ -50,6 +51,10 @@ export const loadCatalogError = createAction(
         };
     }
 );
+
+export const filterOptionsUpdate = createAction(actions.FILTER_OPTIONS_UPDATE, (filterOptions: IFilterOptions) => {
+    return filterOptions;
+});
 
 export const filterCatalog = createAction(
     actions.FILTER_CATALOG,

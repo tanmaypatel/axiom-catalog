@@ -13,6 +13,7 @@ import { IFilterOptions, ISelectedFilters } from '../models/filters';
 interface IProps {
     phones: Phone[];
     filterOptions: IFilterOptions;
+    seletedFilters: ISelectedFilters;
     isCatalogLoading: boolean;
     catalogLoadingError: null | Error;
     dispatchLoadCatalog: (offset: number, limit: number) => void;
@@ -31,7 +32,6 @@ class CatalogPage extends Component<IProps> {
     }
 
     onApplyFilter(selectedFilters: ISelectedFilters) {
-        console.log(selectedFilters);
         this.props.dispatchFilterCatalog(selectedFilters);
     }
 
@@ -41,7 +41,11 @@ class CatalogPage extends Component<IProps> {
                 <h1>Phones</h1>
                 <div className="row">
                     <div className="col-3">
-                        <FilterPanel {...this.props.filterOptions} onApplyFilter={this.onApplyFilter} />
+                        <FilterPanel
+                            {...this.props.filterOptions}
+                            onApplyFilter={this.onApplyFilter}
+                            selectedFilters={this.props.seletedFilters}
+                        />
                     </div>
                     <div className="col-9">
                         <PhoneList phones={this.props.phones} />
@@ -58,6 +62,7 @@ const mapStateToProps = (state: IAppState, props: any): Partial<IProps> => {
             return state.catalog.entities.phones[datum];
         }),
         filterOptions: state.catalog.entities.filterOptions,
+        seletedFilters: state.catalog.ui.selectedFilters,
         isCatalogLoading: state.catalog.ui.isCatalogLoading,
         catalogLoadingError: state.catalog.ui.catalogLoadingError
     };

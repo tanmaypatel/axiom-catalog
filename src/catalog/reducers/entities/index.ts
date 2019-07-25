@@ -1,56 +1,48 @@
 import { FSA } from 'flux-standard-action';
-import { uniq, keyBy } from 'lodash';
+import { keyBy } from 'lodash';
 
 import { IFilterOptions } from '../../models/filters';
-import { IPhone, Phone } from '../../models/phone';
+import { Phone } from '../../models/phone';
 import { actions } from '../../actions';
 
 export interface ICatalogEntitiesState {
     phones: { [key: number]: Phone };
     allIds: number[];
-    filterOptions: undefined | IFilterOptions;
+    filterOptions: IFilterOptions;
 }
 
 const defaultState: ICatalogEntitiesState = {
     phones: [],
     allIds: [],
-    filterOptions: undefined
+    filterOptions: {
+        brands: [],
+        sim: [],
+        gps: [],
+        audioJack: []
+    }
 };
 
-const prepareFilters = (phones: Phone[]): IFilterOptions => {
-    const brands: string[] = [];
-    const sim: string[] = [];
-    const gps: string[] = [];
-    const audioJack: string[] = [];
-
-    phones.forEach((datum) => {
-        brands.push(datum.brand);
-        sim.push(datum.sim);
-        gps.push(datum.hardware.gps);
-        audioJack.push(datum.hardware.audioJack);
-    });
-
-    const uniqueBrands: string[] = uniq(brands);
-    const uniqueSim: string[] = uniq(sim);
-    const uniqueGps: string[] = uniq(gps);
-    const uniqueAudioJack: string[] = uniq(audioJack);
-
-    return {
-        brands: uniqueBrands,
-        sim: uniqueSim,
-        gps: uniqueGps,
-        audioJack: uniqueAudioJack
-    };
-};
-
-export default (state: ICatalogEntitiesState = defaultState, action: FSA<string, Phone[]>): ICatalogEntitiesState => {
+export default (
+    state: ICatalogEntitiesState = defaultState,
+    action: FSA<string, Phone[] | IFilterOptions>
+): ICatalogEntitiesState => {
     switch (action.type) {
         case actions.LOAD_CATALOG__SUCCESS:
-            const phones: Phone[] = action.payload;
+            const phones: Phone[] = action.payload as Phone[];
             return {
                 ...state,
-                phones: { ...state.phones, ...keyBy(phones, 'id') },
-                filterOptions: prepareFilters(phones)
+                phones: { ...state.phones, ...keyBy(phones, 'id') }
+            };
+        case actions.FILTER_OPTIONS_UPDATE:
+            const updatedOptions: IFilterOptions = action.payload as IFilterOptions;
+            return {
+                ...state,
+                filterOptions: {
+                    brands: [...state.filterOptions.brands, ...updatedOptions.brands],
+                    sim: [...state.filterOptions.sim, ...updatedOptions.sim],
+                    gps: [...state.filterOptions.gps, ...updatedOptions.gps],
+                    audioJack: [...state.filterOptions.audioJack, ...updatedOptions.audioJack]
+                }
             };
         default:
             return state;

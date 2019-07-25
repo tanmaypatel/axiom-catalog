@@ -3,7 +3,9 @@ import { SFC } from 'react';
 import { Card, Icon, Image } from 'semantic-ui-react';
 import * as numeral from 'numeral';
 
-import { Phone } from '../models/phone';
+import { Phone } from '../../models/phone';
+
+import './phone-card.scss';
 
 interface IProps {
     phone: Phone;
@@ -11,7 +13,7 @@ interface IProps {
 
 const PhoneCard: SFC<IProps> = (props: IProps) => {
     return (
-        <Card fluid>
+        <Card fluid className="phone-card">
             <Image src={props.phone.picture} wrapped ui={false} />
             <Card.Content>
                 <Card.Header>{props.phone.phone}</Card.Header>
@@ -24,7 +26,7 @@ const PhoneCard: SFC<IProps> = (props: IProps) => {
             </Card.Content>
             <Card.Content extra>
                 <span>
-                    <Icon name='euro' /> {numeral(props.phone.release.priceEur).format('0,0.00')}
+                    <Icon name="euro" /> {numeral(props.phone.release.priceEur).format('0,0.00')}
                 </span>
             </Card.Content>
         </Card>

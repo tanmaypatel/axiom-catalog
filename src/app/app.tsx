@@ -18,10 +18,10 @@ class App extends Component<IProps> {
     render() {
         return (
             <Fragment>
-                <Menu inverted={true} fixed='top'>
+                <Menu inverted={true} fixed="top">
                     <Menu.Item header>Axiom Telecom</Menu.Item>
                 </Menu>
-                <div className='container app-container'>
+                <div className="container app-container">
                     <CatalogPage />
                 </div>
             </Fragment>

@@ -1,0 +1,10 @@
+.phone-card {
+    margin-bottom: 16px;
+    
+    &.ui.card {
+        > .image {
+            padding: 16px;
+            background-color: white;
+        }
+    }
+}

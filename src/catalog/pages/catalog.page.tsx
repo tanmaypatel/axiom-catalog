@@ -6,7 +6,7 @@ import { Menu } from 'semantic-ui-react';
 import { IAppState } from '../../store';
 import { Phone } from '../../catalog/models/phone';
 import { loadCatalog } from '../../catalog/actions';
-import { PhoneList } from '../components/phone-list';
+import { PhoneList } from '../components/phone-list/phone-list';
 
 interface IProps {
     phones: Phone[];

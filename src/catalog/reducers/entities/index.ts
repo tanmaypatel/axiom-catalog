@@ -27,6 +27,7 @@ export default (
     switch (action.type) {
         case actions.LOAD_CATALOG__SUCCESS:
             const phones: Phone[] = action.payload as Phone[];
+
             return {
                 ...state,
                 phones: { ...state.phones, ...keyBy(phones, 'id') }

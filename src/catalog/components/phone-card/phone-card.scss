@@ -1,0 +1,22 @@
+.phone-card {
+    margin-bottom: 16px;
+    
+    &.ui.card {
+        > .image {
+            padding: 16px;
+            background-color: white;
+        }
+    }
+
+    .attribute {
+        display: block;
+        margin-bottom: 0.5em;
+        line-height: 1.2;
+
+        .attribute-label {
+            color: rgba(0, 0, 0, 0.4);
+            display: inline-block;
+            margin-right: 0.3em;
+        }
+    }
+}

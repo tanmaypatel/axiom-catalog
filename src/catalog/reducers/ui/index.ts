@@ -34,7 +34,14 @@ export default (state: ICatalogUIState = defaultState, action: FSA<string, any>)
         case actions.LOAD_CATALOG__ERROR:
             return {
                 ...state,
+                isCatalogLoading: false,
                 catalogLoadingError: action.payload
+            };
+
+        case actions.LOAD_CATALOG__SUCCESS:
+            return {
+                ...state,
+                isCatalogLoading: false
             };
 
         case actions.FILTER_OPTIONS_UPDATE:

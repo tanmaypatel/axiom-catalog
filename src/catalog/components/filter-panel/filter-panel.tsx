@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Card, Checkbox, Button, Input } from 'semantic-ui-react';
+import { Component, Fragment, SFC } from 'react';
+import { Card, Checkbox, Button, Input, Placeholder } from 'semantic-ui-react';
 import { map, forEach, filter, omitBy, zipObject, constant, times } from 'lodash';
 
 import { IAppState } from '../../../store';
 import { IFilterOptions, ISelectedFilters } from '../../models/filters';
 
 interface IProps extends IFilterOptions {
-    onApplyFilter: (selectedFilters: ISelectedFilters) => void;
     selectedFilters: ISelectedFilters;
+    onApplyFilter: (selectedFilters: ISelectedFilters) => void;
+    onResetFilters: () => void;
 }
 
 interface IState {
@@ -19,6 +19,15 @@ interface IState {
     gps: { [key: string]: boolean };
     audioJack: { [key: string]: boolean };
 }
+
+const FilterOptionPlaceholder: SFC<{}> = () => {
+    return (
+        <Placeholder>
+            <Placeholder.Line length="full" />
+            <Placeholder.Line length="medium" />
+        </Placeholder>
+    );
+};
 
 export class FilterPanel extends Component<IProps> {
     state: IState = {
@@ -35,6 +44,7 @@ export class FilterPanel extends Component<IProps> {
         this.onFilterOptionCheckBoxChange = this.onFilterOptionCheckBoxChange.bind(this);
         this.onSearchInput = this.onSearchInput.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
+        this.onBtnResetFiltersClick = this.onBtnResetFiltersClick.bind(this);
     }
 
     componentWillReceiveProps(nextProps: IProps) {
@@ -77,12 +87,29 @@ export class FilterPanel extends Component<IProps> {
         });
     }
 
+    onBtnResetFiltersClick(event: React.MouseEvent) {
+        event.preventDefault();
+        this.props.onResetFilters();
+    }
+
     render() {
         return (
             <form onSubmit={this.onSubmit}>
-                <Card>
+                <Card fluid>
                     <Card.Content>
-                        <Card.Header>Filter</Card.Header>
+                        <Card.Header>
+                            Filter
+                            <Button
+                                basic
+                                color="grey"
+                                floated="right"
+                                size="mini"
+                                compact
+                                onClick={this.onBtnResetFiltersClick}
+                            >
+                                Reset Filters
+                            </Button>
+                        </Card.Header>
                     </Card.Content>
                     <Card.Content>
                         <Card.Meta>Search</Card.Meta>
@@ -90,11 +117,11 @@ export class FilterPanel extends Component<IProps> {
                             <Input fluid placeholder="Search..." value={this.state.searchTerm} onInput={this.onSearchInput} />
                         </Card.Description>
                     </Card.Content>
-                    {this.props.brands.length ? (
-                        <Card.Content>
-                            <Card.Meta>Brands</Card.Meta>
-                            <Card.Description>
-                                {map(this.props.brands, (name: string) => {
+                    <Card.Content>
+                        <Card.Meta>Brands</Card.Meta>
+                        <Card.Description>
+                            {this.props.brands.length ? (
+                                map(this.props.brands, (name: string) => {
                                     return (
                                         <Fragment key={name}>
                                             <Checkbox
@@ -105,15 +132,17 @@ export class FilterPanel extends Component<IProps> {
                                             <br />
                                         </Fragment>
                                     );
-                                })}
-                            </Card.Description>
-                        </Card.Content>
-                    ) : null}
-                    {this.props.sim.length ? (
-                        <Card.Content>
-                            <Card.Meta>SIM</Card.Meta>
-                            <Card.Description>
-                                {map(this.props.sim, (name: string) => {
+                                })
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content>
+                        <Card.Meta>SIM</Card.Meta>
+                        <Card.Description>
+                            {this.props.sim.length ? (
+                                map(this.props.sim, (name: string) => {
                                     return (
                                         <Fragment key={name}>
                                             <Checkbox
@@ -124,15 +153,17 @@ export class FilterPanel extends Component<IProps> {
                                             <br />
                                         </Fragment>
                                     );
-                                })}
-                            </Card.Description>
-                        </Card.Content>
-                    ) : null}
-                    {this.props.gps.length ? (
-                        <Card.Content>
-                            <Card.Meta>GPS</Card.Meta>
-                            <Card.Description>
-                                {map(this.props.gps, (name: string) => {
+                                })
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content>
+                        <Card.Meta>GPS</Card.Meta>
+                        <Card.Description>
+                            {this.props.gps.length ? (
+                                map(this.props.gps, (name: string) => {
                                     return (
                                         <Fragment key={name}>
                                             <Checkbox
@@ -143,15 +174,17 @@ export class FilterPanel extends Component<IProps> {
                                             <br />
                                         </Fragment>
                                     );
-                                })}
-                            </Card.Description>
-                        </Card.Content>
-                    ) : null}
-                    {this.props.audioJack.length ? (
-                        <Card.Content>
-                            <Card.Meta>Audio Jack</Card.Meta>
-                            <Card.Description>
-                                {map(this.props.audioJack, (name: string) => {
+                                })
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content>
+                        <Card.Meta>Audio Jack</Card.Meta>
+                        <Card.Description>
+                            {this.props.audioJack.length ? (
+                                map(this.props.audioJack, (name: string) => {
                                     return (
                                         <Fragment key={name}>
                                             <Checkbox
@@ -162,13 +195,15 @@ export class FilterPanel extends Component<IProps> {
                                             <br />
                                         </Fragment>
                                     );
-                                })}
-                            </Card.Description>
-                        </Card.Content>
-                    ) : null}
+                                })
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
+                        </Card.Description>
+                    </Card.Content>
                     <Card.Content extra>
-                        <Button basic fluid color="green">
-                            Filter
+                        <Button primary fluid>
+                            Apply Filters
                         </Button>
                     </Card.Content>
                 </Card>

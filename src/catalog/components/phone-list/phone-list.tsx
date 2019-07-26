@@ -18,7 +18,7 @@ const PhoneList: SFC<IProps> = (props: IProps) => {
     return (
         <div className="phone-list row">
             {props.isLoading
-                ? times(4, () => {
+                ? times(3, () => {
                       return (
                           <div className="phone-card-wrapper col-6 col-lg-4">
                               <PhoneCardPlaceholder />

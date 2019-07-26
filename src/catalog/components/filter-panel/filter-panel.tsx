@@ -7,6 +7,7 @@ import { IAppState } from '../../../store';
 import { IFilterOptions, ISelectedFilters } from '../../models/filters';
 
 interface IProps extends IFilterOptions {
+    isLoading: boolean;
     selectedFilters: ISelectedFilters;
     onApplyFilter: (selectedFilters: ISelectedFilters) => void;
     onResetFilters: () => void;
@@ -99,28 +100,39 @@ export class FilterPanel extends Component<IProps> {
                     <Card.Content>
                         <Card.Header>
                             Filter
-                            <Button
-                                basic
-                                color="grey"
-                                floated="right"
-                                size="mini"
-                                compact
-                                onClick={this.onBtnResetFiltersClick}
-                            >
-                                Reset Filters
-                            </Button>
+                            {!this.props.isLoading ? (
+                                <Button
+                                    basic
+                                    color="grey"
+                                    floated="right"
+                                    size="mini"
+                                    compact
+                                    onClick={this.onBtnResetFiltersClick}
+                                >
+                                    Reset Filters
+                                </Button>
+                            ) : null}
                         </Card.Header>
                     </Card.Content>
                     <Card.Content>
                         <Card.Meta>Search</Card.Meta>
                         <Card.Description>
-                            <Input fluid placeholder="Search..." value={this.state.searchTerm} onInput={this.onSearchInput} />
+                            {!this.props.isLoading ? (
+                                <Input
+                                    fluid
+                                    placeholder="Search..."
+                                    value={this.state.searchTerm}
+                                    onInput={this.onSearchInput}
+                                />
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
                         </Card.Description>
                     </Card.Content>
                     <Card.Content>
                         <Card.Meta>Brands</Card.Meta>
                         <Card.Description>
-                            {this.props.brands.length ? (
+                            {!this.props.isLoading ? (
                                 map(this.props.brands, (name: string) => {
                                     return (
                                         <Fragment key={name}>
@@ -141,7 +153,7 @@ export class FilterPanel extends Component<IProps> {
                     <Card.Content>
                         <Card.Meta>SIM</Card.Meta>
                         <Card.Description>
-                            {this.props.sim.length ? (
+                            {!this.props.isLoading ? (
                                 map(this.props.sim, (name: string) => {
                                     return (
                                         <Fragment key={name}>
@@ -162,7 +174,7 @@ export class FilterPanel extends Component<IProps> {
                     <Card.Content>
                         <Card.Meta>GPS</Card.Meta>
                         <Card.Description>
-                            {this.props.gps.length ? (
+                            {!this.props.isLoading ? (
                                 map(this.props.gps, (name: string) => {
                                     return (
                                         <Fragment key={name}>
@@ -183,7 +195,7 @@ export class FilterPanel extends Component<IProps> {
                     <Card.Content>
                         <Card.Meta>Audio Jack</Card.Meta>
                         <Card.Description>
-                            {this.props.audioJack.length ? (
+                            {!this.props.isLoading ? (
                                 map(this.props.audioJack, (name: string) => {
                                     return (
                                         <Fragment key={name}>
@@ -201,11 +213,13 @@ export class FilterPanel extends Component<IProps> {
                             )}
                         </Card.Description>
                     </Card.Content>
-                    <Card.Content extra>
-                        <Button primary fluid>
-                            Apply Filters
-                        </Button>
-                    </Card.Content>
+                    {!this.props.isLoading ? (
+                        <Card.Content extra>
+                            <Button primary fluid>
+                                Apply Filters
+                            </Button>
+                        </Card.Content>
+                    ) : null}
                 </Card>
             </form>
         );

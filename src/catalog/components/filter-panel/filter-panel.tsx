@@ -6,6 +6,8 @@ import { map, forEach, filter, omitBy, zipObject, constant, times } from 'lodash
 import { IAppState } from '../../../store';
 import { IFilterOptions, ISelectedFilters } from '../../models/filters';
 
+import './filter-panel.scss';
+
 interface IProps extends IFilterOptions {
     isLoading: boolean;
     selectedFilters: ISelectedFilters;
@@ -124,7 +126,7 @@ export class FilterPanel extends Component<IProps, IState> {
     render() {
         return (
             <form onSubmit={this.onSubmit}>
-                <Card fluid>
+                <Card fluid className="card-filters">
                     <Card.Content>
                         <Card.Header>
                             Filter

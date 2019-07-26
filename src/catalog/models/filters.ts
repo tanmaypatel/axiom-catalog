@@ -7,4 +7,6 @@ export interface IFilterOptions {
 
 export interface ISelectedFilters extends IFilterOptions {
     searchTerm: string;
+    minimumPrice: number;
+    maximumPrice: number;
 }

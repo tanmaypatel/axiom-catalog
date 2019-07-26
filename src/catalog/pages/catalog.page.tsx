@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { Ref, Sticky, Header, Message } from 'semantic-ui-react';
 import { register } from 'enquire.js';
 
 import { IAppState } from '../../store';
@@ -10,7 +11,6 @@ import { PhoneList } from '../components/phone-list/phone-list';
 import { FilterPanel } from '../components/filter-panel/filter-panel';
 import { IFilterOptions, ISelectedFilters } from '../models/filters';
 import { applyFilters } from '../selectors/filters.selector';
-import { Ref, Sticky, Header } from 'semantic-ui-react';
 
 interface IProps {
     phones: Phone[];
@@ -87,8 +87,16 @@ class CatalogPage extends Component<IProps, IState> {
                             {this.props.phones.length ? (
                                 <Header as="h1">
                                     <Header.Content>
-                                        {this.props.phones.length} Matching Devices
-                                        <Header.Subheader>From {this.props.availablePhonesCount} Available</Header.Subheader>
+                                        {this.props.phones.length !== this.props.availablePhonesCount ? (
+                                            <Fragment>
+                                                {this.props.phones.length} Matching Devices
+                                                <Header.Subheader>
+                                                    From {this.props.availablePhonesCount} Available
+                                                </Header.Subheader>
+                                            </Fragment>
+                                        ) : (
+                                            <Fragment>{this.props.phones.length} Devices</Fragment>
+                                        )}
                                     </Header.Content>
                                 </Header>
                             ) : (
@@ -96,11 +104,19 @@ class CatalogPage extends Component<IProps, IState> {
                                     <Header.Content>Devices</Header.Content>
                                 </Header>
                             )}
-                            <PhoneList
-                                isLoading={this.props.isCatalogLoading}
-                                phones={this.props.phones}
-                                onResetFilters={this.onResetFilters}
-                            />
+                            {this.props.catalogLoadingError ? (
+                                <Message negative>
+                                    <Message.Header>Unable to retrieve available Devices</Message.Header>
+                                    <p>Please try again by reloading the page!</p>
+                                </Message>
+                            ) : null}
+                            {!this.props.catalogLoadingError ? (
+                                <PhoneList
+                                    isLoading={this.props.isCatalogLoading}
+                                    phones={this.props.phones}
+                                    onResetFilters={this.onResetFilters}
+                                />
+                            ) : null}
                         </div>
                     </div>
                 </Ref>

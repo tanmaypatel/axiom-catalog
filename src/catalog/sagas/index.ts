@@ -64,7 +64,9 @@ function* resetFilters(action: FSA<string>): IterableIterator<any> {
             brands: [...filterOptions.brands],
             sim: [...filterOptions.sim],
             gps: [...filterOptions.gps],
-            audioJack: [...filterOptions.audioJack]
+            audioJack: [...filterOptions.audioJack],
+            minimumPrice: Number.NEGATIVE_INFINITY,
+            maximumPrice: Number.POSITIVE_INFINITY
         };
 
         yield put(filterCatalog(selectedFilters));

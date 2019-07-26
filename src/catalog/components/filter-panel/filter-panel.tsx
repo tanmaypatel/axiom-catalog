@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Component, Fragment, SFC } from 'react';
-import { Card, Checkbox, Button, Input, Placeholder } from 'semantic-ui-react';
+import { Card, Checkbox, Button, Input, Placeholder, Icon } from 'semantic-ui-react';
 import { map, forEach, filter, omitBy, zipObject, constant, times } from 'lodash';
 
 import { IAppState } from '../../../store';
@@ -19,6 +19,8 @@ interface IState {
     sim: { [key: string]: boolean };
     gps: { [key: string]: boolean };
     audioJack: { [key: string]: boolean };
+    minimumPrice: number;
+    maximumPrice: number;
 }
 
 const FilterOptionPlaceholder: SFC<{}> = () => {
@@ -30,13 +32,15 @@ const FilterOptionPlaceholder: SFC<{}> = () => {
     );
 };
 
-export class FilterPanel extends Component<IProps> {
+export class FilterPanel extends Component<IProps, IState> {
     state: IState = {
         searchTerm: '',
         brands: {},
         sim: {},
         gps: {},
-        audioJack: {}
+        audioJack: {},
+        minimumPrice: Number.NEGATIVE_INFINITY,
+        maximumPrice: Number.POSITIVE_INFINITY
     };
 
     constructor(props: IProps) {
@@ -44,12 +48,14 @@ export class FilterPanel extends Component<IProps> {
 
         this.onFilterOptionCheckBoxChange = this.onFilterOptionCheckBoxChange.bind(this);
         this.onSearchInput = this.onSearchInput.bind(this);
+        this.onTxtMinimumPriceInput = this.onTxtMinimumPriceInput.bind(this);
+        this.onTxtMaximumPriceInput = this.onTxtMaximumPriceInput.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.onBtnResetFiltersClick = this.onBtnResetFiltersClick.bind(this);
     }
 
     componentWillReceiveProps(nextProps: IProps) {
-        const updatedState = this._updateStateWithProps(nextProps);
+        const updatedState: unknown = this._updateStateWithProps(nextProps);
         this.setState(updatedState);
     }
 
@@ -62,13 +68,33 @@ export class FilterPanel extends Component<IProps> {
             const updatedState: { [key: string]: boolean } = {};
             updatedState[filterName] = existingStateForFilterName;
 
-            this.setState(updatedState);
+            this.setState(updatedState as unknown);
         }).bind(this);
     }
 
     onSearchInput(event: React.FormEvent) {
         this.setState({
             searchTerm: (event.target as HTMLInputElement).value
+        });
+    }
+
+    onTxtMinimumPriceInput(event: React.FormEvent) {
+        let price: number = parseFloat((event.target as HTMLInputElement).value);
+        if (isNaN(price)) {
+            price = Number.NEGATIVE_INFINITY;
+        }
+        this.setState({
+            minimumPrice: price
+        });
+    }
+
+    onTxtMaximumPriceInput(event: React.FormEvent) {
+        let price: number = parseFloat((event.target as HTMLInputElement).value);
+        if (isNaN(price)) {
+            price = Number.POSITIVE_INFINITY;
+        }
+        this.setState({
+            maximumPrice: price
         });
     }
 
@@ -84,7 +110,9 @@ export class FilterPanel extends Component<IProps> {
             brands: selectedBrands,
             sim: selectedSim,
             gps: selectedGPS,
-            audioJack: selectedAudioJack
+            audioJack: selectedAudioJack,
+            minimumPrice: this.state.minimumPrice,
+            maximumPrice: this.state.maximumPrice
         });
     }
 
@@ -102,6 +130,8 @@ export class FilterPanel extends Component<IProps> {
                             Filter
                             {!this.props.isLoading ? (
                                 <Button
+                                    as="a"
+                                    href="#"
                                     basic
                                     color="grey"
                                     floated="right"
@@ -145,6 +175,51 @@ export class FilterPanel extends Component<IProps> {
                                         </Fragment>
                                     );
                                 })
+                            ) : (
+                                <FilterOptionPlaceholder />
+                            )}
+                        </Card.Description>
+                    </Card.Content>
+                    <Card.Content>
+                        <Card.Meta>Price</Card.Meta>
+                        <Card.Description>
+                            {!this.props.isLoading ? (
+                                <Fragment>
+                                    <div className="row">
+                                        <div className="col-6">
+                                            <Input
+                                                fluid
+                                                iconPosition="left"
+                                                placeholder="Minimum (€)"
+                                                value={
+                                                    this.state.minimumPrice === Number.NEGATIVE_INFINITY
+                                                        ? ''
+                                                        : this.state.minimumPrice
+                                                }
+                                                onInput={this.onTxtMinimumPriceInput}
+                                            >
+                                                <Icon name="eur" />
+                                                <input />
+                                            </Input>
+                                        </div>
+                                        <div className="col-6">
+                                            <Input
+                                                fluid
+                                                iconPosition="left"
+                                                placeholder="Maximum (€)"
+                                                value={
+                                                    this.state.maximumPrice === Number.POSITIVE_INFINITY
+                                                        ? ''
+                                                        : this.state.maximumPrice
+                                                }
+                                                onInput={this.onTxtMaximumPriceInput}
+                                            >
+                                                <Icon name="eur" />
+                                                <input />
+                                            </Input>
+                                        </div>
+                                    </div>
+                                </Fragment>
                             ) : (
                                 <FilterOptionPlaceholder />
                             )}
@@ -227,10 +302,16 @@ export class FilterPanel extends Component<IProps> {
 
     private _updateStateWithProps(props: IProps): Partial<IState> {
         const updatedState: Partial<IState> = {
+            searchTerm: props.selectedFilters.searchTerm,
             brands: zipObject(props.selectedFilters.brands, times(props.selectedFilters.brands.length, constant(true))),
             sim: zipObject(props.selectedFilters.sim, times(props.selectedFilters.sim.length, constant(true))),
             gps: zipObject(props.selectedFilters.gps, times(props.selectedFilters.gps.length, constant(true))),
-            audioJack: zipObject(props.selectedFilters.audioJack, times(props.selectedFilters.audioJack.length, constant(true)))
+            audioJack: zipObject(
+                props.selectedFilters.audioJack,
+                times(props.selectedFilters.audioJack.length, constant(true))
+            ),
+            minimumPrice: props.selectedFilters.minimumPrice,
+            maximumPrice: props.selectedFilters.maximumPrice
         };
 
         return updatedState;

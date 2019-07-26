@@ -19,6 +19,10 @@ const applyFilters = (phones: { [key: number]: Phone }, selectedFilters: ISelect
             doesPhoneSatisfyFilter = false;
         } else if (!selectedFilters.audioJack.includes(datum.hardware.audioJack)) {
             doesPhoneSatisfyFilter = false;
+        } else if (datum.release.priceEur < selectedFilters.minimumPrice) {
+            doesPhoneSatisfyFilter = false;
+        } else if (datum.release.priceEur > selectedFilters.maximumPrice) {
+            doesPhoneSatisfyFilter = false;
         } else if (selectedFilters.searchTerm) {
             if (!new RegExp(selectedFilters.searchTerm, 'ig').test(_prepareTextForSearch(datum))) {
                 doesPhoneSatisfyFilter = false;

@@ -1,11 +1,19 @@
 import { FSA } from 'flux-standard-action';
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest, select } from 'redux-saga/effects';
 import { uniq } from 'lodash';
 
-import { actions, loadCatalogStart, loadCatalogSuccess, loadCatalogError, filterOptionsUpdate } from '../actions';
+import {
+    actions,
+    loadCatalogStart,
+    loadCatalogSuccess,
+    loadCatalogError,
+    filterOptionsUpdate,
+    filterCatalog
+} from '../actions';
 import { CatalogService } from '../services/catalog.service';
 import { Phone } from '../models/phone';
-import { IFilterOptions } from '../models/filters';
+import { IFilterOptions, ISelectedFilters } from '../models/filters';
+import { IAppState } from '../../store';
 
 const _prepareFilters = (phones: Phone[]): IFilterOptions => {
     const brands: string[] = [];
@@ -45,8 +53,31 @@ function* loadCatalog(action: FSA<string, any>): IterableIterator<any> {
     }
 }
 
+function* resetFilters(action: FSA<string>): IterableIterator<any> {
+    try {
+        const filterOptions: IFilterOptions = yield select((state: IAppState) => {
+            return state.catalog.entities.filterOptions;
+        });
+
+        const selectedFilters: ISelectedFilters = {
+            searchTerm: '',
+            brands: [...filterOptions.brands],
+            sim: [...filterOptions.sim],
+            gps: [...filterOptions.gps],
+            audioJack: [...filterOptions.audioJack],
+            minimumPrice: Number.NEGATIVE_INFINITY,
+            maximumPrice: Number.POSITIVE_INFINITY
+        };
+
+        yield put(filterCatalog(selectedFilters));
+    } catch (error) {
+        // do nothing
+    }
+}
+
 function* catalogSaga(): IterableIterator<any> {
     yield takeLatest(actions.LOAD_CATALOG, loadCatalog);
+    yield takeLatest(actions.RESET_FILTERS, resetFilters);
 }
 
 export default catalogSaga;

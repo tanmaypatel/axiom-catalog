@@ -13,6 +13,7 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "core-js": "^3.1.4",
+    "enquire.js": "^2.1.6",
     "es6-promise": "^4.2.8",
     "isomorphic-fetch": "^2.2.1",
     "lodash": "^4.17.15",
@@ -30,6 +31,7 @@
     "semantic-ui-react": "^0.87.3"
   },
   "devDependencies": {
+    "@types/enquire.js": "^2.1.2",
     "@types/isomorphic-fetch": "^0.0.35",
     "@types/lodash": "^4.14.136",
     "@types/numeral": "^0.0.25",

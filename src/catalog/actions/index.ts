@@ -4,12 +4,13 @@ import { Phone } from '../models/phone';
 import { ISelectedFilters, IFilterOptions } from '../models/filters';
 
 export const actions = {
-    LOAD_CATALOG: 'LOAD_CATALOG',
-    LOAD_CATALOG__START: 'LOAD_CATALOG__START',
-    LOAD_CATALOG__SUCCESS: 'LOAD_CATALOG__SUCCESS',
-    LOAD_CATALOG__ERROR: 'LOAD_CATALOG__ERROR',
-    FILTER_OPTIONS_UPDATE: 'FILTER_OPTIONS_UPDATE',
-    FILTER_CATALOG: 'FILTER_CATALOG'
+    LOAD_CATALOG: 'actions.catalog.LOAD_CATALOG',
+    LOAD_CATALOG__START: 'actions.catalog.LOAD_CATALOG__START',
+    LOAD_CATALOG__SUCCESS: 'actions.catalog.LOAD_CATALOG__SUCCESS',
+    LOAD_CATALOG__ERROR: 'actions.catalog.LOAD_CATALOG__ERROR',
+    FILTER_OPTIONS_UPDATE: 'actions.catalog.FILTER_OPTIONS_UPDATE',
+    FILTER_CATALOG: 'actions.catalog.FILTER_CATALOG',
+    RESET_FILTERS: 'actions.catalog.RESET_FILTERS'
 };
 
 export const loadCatalog = createAction(actions.LOAD_CATALOG, (offset: number, limit: number) => {
@@ -65,3 +66,7 @@ export const filterCatalog = createAction(
         return selectedFilters;
     }
 );
+
+export const resetFilters = createAction(actions.RESET_FILTERS, () => {
+    return;
+});

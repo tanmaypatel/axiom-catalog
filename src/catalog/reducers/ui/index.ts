@@ -17,7 +17,9 @@ const defaultState: ICatalogUIState = {
         brands: [],
         sim: [],
         gps: [],
-        audioJack: []
+        audioJack: [],
+        minimumPrice: Number.NEGATIVE_INFINITY,
+        maximumPrice: Number.POSITIVE_INFINITY
     },
     isCatalogLoading: false,
     catalogLoadingError: null
@@ -34,7 +36,14 @@ export default (state: ICatalogUIState = defaultState, action: FSA<string, any>)
         case actions.LOAD_CATALOG__ERROR:
             return {
                 ...state,
+                isCatalogLoading: false,
                 catalogLoadingError: action.payload
+            };
+
+        case actions.LOAD_CATALOG__SUCCESS:
+            return {
+                ...state,
+                isCatalogLoading: false
             };
 
         case actions.FILTER_OPTIONS_UPDATE:
@@ -53,7 +62,7 @@ export default (state: ICatalogUIState = defaultState, action: FSA<string, any>)
         case actions.FILTER_CATALOG:
             return {
                 ...state,
-                selectedFilters: action.payload
+                selectedFilters: { ...action.payload }
             };
         default:
             return state;

@@ -40,7 +40,7 @@ const PhoneList: SFC<IProps> = (props: IProps) => {
                     <Segment placeholder>
                         <Header icon>
                             <Icon name="warning" />
-                            No Phones Available
+                            No Devices Available
                         </Header>
                         <Button primary onClick={props.onResetFilters}>Reset Filters</Button>
                     </Segment>
